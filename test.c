@@ -1,46 +1,75 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <string.h>
 
-void printLabyrinth(char **labyrinth, int lins, int cols) {
-    for (int i = 0; i < lins; i++) {
-            printf("%s", labyrinth[i]);
+#define N 5 // Tamanho do labirinto
+
+int labirinto[N][N] = {
+    {1, 1, 1, 0, 1},
+    {0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 1},
+    {1, 0, 0, 0, 1},
+    {1, 1, 1, 1, 1}
+};
+
+int solucao[N][N]; // Matriz para armazenar a solução
+
+int encontrarCaminho(int x, int y) {
+    // Verificar se chegamos ao final
+    if (x == N - 1 && y == N - 1) {
+        solucao[x][y] = 1;
+        return 1;
+    }
+
+    // Verificar se a posição atual é válida
+    if (x >= 0 && y >= 0 && x < N && y < N && labirinto[x][y] == 1) {
+        // Marcar a posição atual como parte da solução
+        solucao[x][y] = 1;
+
+        // Mover para a direita
+        if (encontrarCaminho(x, y + 1))
+            return 1;
+
+        // Mover para baixo
+        if (encontrarCaminho(x + 1, y))
+            return 1;
+
+        // Se nenhuma direção leva ao final, marcar a posição como não parte da solução
+        solucao[x][y] = 0;
+        return 0;
+    }
+
+    return 0;
+}
+
+void imprimirLabirinto() {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            printf("%d ", labirinto[i][j]);
+        }
+        printf("\n");
     }
 }
 
-char** alocarLabirinto(int lins, int cols) {
-    char **labirinto = malloc(lins * sizeof(char*));
-    for (int i = 0; i < lins; i++) {
-        labirinto[i] = malloc(cols * sizeof(char));
+void imprimirSolucao() {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            printf("%d ", solucao[i][j]);
+        }
+        printf("\n");
     }
-
-    return labirinto;
-}
-
-void leLabirinto(int lins, int cols) {
-    //char arquivo[30]; //char opt;
-    /*printf("Digite o nome do arquivo a ser aberto: ");
-    scanf("%s", arquivo);
-    FILE *arq = fopen(arquivo);
-    fscanf(arquivo ,"%d %d", &lins, &cols);
-    char **labirinto = alocarLabirinto(lins, cols);
-    fgets(100, labirinto, stdin);*/
-
-    char **labirinto = alocarLabirinto(lins, cols);
-    //scanf("%c", &opt);
-    for (int i = 0; i < lins + 1; i++) {
-        fgets(labirinto[i], sizeof(labirinto[i]), stdin);
-    }
-    printLabyrinth(labirinto, lins, cols);
 }
 
 int main() {
-    int lins, cols;
-    scanf("%d %d", &lins, &cols);
-    getchar();
-
-    leLabirinto(lins, cols);
+    printf("Labirinto:\n");
+    imprimirLabirinto();
     
+    printf("\nEncontrando a solução...\n");
+    if (encontrarCaminho(0, 0)) {
+        printf("Solução encontrada!\n\n");
+        printf("Solução:\n");
+        imprimirSolucao();
+    } else {
+        printf("Nenhuma solução encontrada.\n");
+    }
+
     return 0;
 }
