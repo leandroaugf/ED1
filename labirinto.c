@@ -45,7 +45,7 @@ void leLabirinto(char **lab, int lins, int cols) {
 // Funcao para achar o menor caminho atraves de recursao
 int acharSaida(char** lab, int x, int y, int lins, int cols){  
   // Verifica se está fora dos limites do labirinto ou encontrou um obstáculo
-  if(x < 0 || x >= lins || y < 0 || y >= cols || lab[x][y] == '*' || lab[x][y] == '.'){
+  if(x < 0 || x >= lins || y < 0 || y >= cols || lab[x][y] == '*' || lab[x][y] == '.' || lab[x][y] == '#'){
     return 0;
   }
 
