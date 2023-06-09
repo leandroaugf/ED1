@@ -1,13 +1,17 @@
 #ifndef LABIRINTO_H
 #define LABIRINTO_H
 
-#include "posicao.h"
+typedef struct labirinto Labirinto;
 
-char** alocarLabirinto(int, int);
-void leLabirinto(char **, int , int);
-void desalocarLabirinto(char **, int);
-int acharSaida(char**, int, int, int, int);
+Labirinto* alocarLabirinto(int, int);
+void leLabirinto(Labirinto*);
+void desalocarLabirinto(Labirinto**);
+int acharSaida(Labirinto*, int, int);
 void criaSolucao(char**, int , int);
-void printLabirinto(char **, int , int, int, int); 
+void printLabirinto(Labirinto*, int, int); 
+void primeiraPosicao(Labirinto*, int*, int*);
+int contador(Labirinto*);
+void printCoordenadas(Labirinto*, int, int);
+
 
 #endif // LABIRINTO_H
