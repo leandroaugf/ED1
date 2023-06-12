@@ -18,6 +18,13 @@ struct posicao{
 
 };
 
+struct percurso{
+
+  Posicao** posicao_saida;
+  int tamanho;
+
+};
+
 
 
 // Funcao que imprime pontilhados ate o final do lab;
@@ -85,6 +92,7 @@ void primeiraPosicao(Labirinto* labirinto, int* x, int* y){
     }
 }
 
+
 // Funcao que retorna a quantidade de passos ate o final do labirinto
 int contador(Labirinto* labirinto){
 
@@ -101,22 +109,56 @@ int contador(Labirinto* labirinto){
     return contador - 1;
 }
 
+Percurso* alocarPercurso(Labirinto* labirinto, int x, int y){
+  Percurso* percurso = malloc(sizeof(Percurso));
+
+  int cont;
+  cont = contador(labirinto);
+  percurso->tamanho = cont;
+  percurso->posicao_saida = (Posicao**)malloc(cont * sizeof(Posicao*));
+
+  for(int i = 0; i < cont; i++){
+    percurso->posicao_saida[i] = designaPosicao(x, y);
+  }
+
+  return percurso;
+
+}
+
 // Funcao que imprime as coordenadas ate o final do labirinto;
-void printCoordenadas(Labirinto* labirinto, Posicao* posicao){
+void designaCoordenadas(Labirinto* labirinto, Percurso* percurso, Posicao* posicao){
 
-    for(int i = 0; i < labirinto->lins; i++){
-        for(int j = 0; j < labirinto->cols; j++){
-           
-           // Volta a colocar o 'M' na posicao inicial ja que a funcao acharSaida o substitui por pontilhado
-           if(i == posicao->x && j == posicao->y){
-            labirinto->lab[i][j] = 'M';
-           }
-
-            if(labirinto->lab[i][j] == '.'){
-                printf("%d, %d\n", i, j);
-            }
-        }
+    for(int k = 0; k < percurso->tamanho; k++){
+      percurso->posicao_saida[k]->x = -1;   // Inicializa as coordenadas com valor invalido (-1,-1)
+      percurso->posicao_saida[k]->y = -1;
     }
+
+    for(int i = 0; i < labirinto->lins; i++) {
+      for(int j = 0; j < labirinto->cols; j++) {
+        if(i == posicao->x && j == posicao->y){
+        labirinto->lab[i][j] = 'M';
+        }
+        if(labirinto->lab[i][j] == '.') {
+          for(int k = 0; k < percurso->tamanho; k++){
+            if(percurso->posicao_saida[k]->x == -1 && percurso->posicao_saida[k]->y == -1){
+              percurso->posicao_saida[k]->x = i;
+              percurso->posicao_saida[k]->y = j;
+              break;
+            }
+          }
+        }
+      }
+    }
+}
+
+void printCoordenadas(Labirinto* labirinto, Percurso* percurso){
+
+  if(percurso->tamanho >= 0){  
+    printf("Coordenadas ate a saida: \n");
+    for(int i = 0; i < percurso->tamanho; i++){
+      printf("%d, %d\n", percurso->posicao_saida[i]->x, percurso->posicao_saida[i]->y);
+    }
+  }
 }
 
 // Funcao para achar o menor caminho atraves de recursao
@@ -175,6 +217,15 @@ int acharSaida(Labirinto* labirinto, Posicao* posicao){
   
 }
 
+void passosAteSaida(Percurso* percurso){
+  
+  if(percurso->tamanho < 0){
+    printf("EPIC FAIL!\n"); 
+  } else {
+    printf("Numero de passos:%d\n", percurso->tamanho);
+  }
+}
+
 // Funcao para desalocar memoria
 void desalocarLabirinto(Labirinto** labirinto){
 
@@ -189,4 +240,15 @@ void desalocarLabirinto(Labirinto** labirinto){
 void desalocarPosicao(Posicao** posicao){
   
   free(*posicao);
+
+}
+
+void desalocarPercurso(Percurso** percurso) {
+   
+  for(int i = 0; i < (*percurso)->tamanho; i++){
+    desalocarPosicao(&(*percurso)->posicao_saida[i]);
+  }
+  
+  free((*percurso)->posicao_saida);
+  free(*percurso);
 }
