@@ -15,9 +15,10 @@ int main(void) {
 
     // Declaracao de variaveis;
     Labirinto *labirinto;
+    Posicao *posicao;
+    int x, y;
     int lins, cols;
     char opcao;
-    int x, y; // Posicao inicial do rato
     int cont; // Contador de passos
 
 
@@ -33,7 +34,8 @@ int main(void) {
         case 'p':
           leLabirinto(labirinto);
           primeiraPosicao(labirinto, &x, &y);
-          acharSaida(labirinto, x, y);
+          posicao = designaPosicao(x, y);
+          acharSaida(labirinto, posicao);
           cont = contador(labirinto);
           if(cont < 0){ // Contador retorna negativo se o labirinto nao tiver saida
             printf("EPIC FAIL!\n");   
@@ -41,14 +43,15 @@ int main(void) {
           }
           printf("Numero de passos:%d\n", cont);
           printf("Caminho da saida:\n");
-          printLabirinto(labirinto, x, y);
+          printLabirinto(labirinto, posicao);
         break;
 
         // Imprime as coordenadas ate o destinho;
         case 'c':
           leLabirinto(labirinto);
           primeiraPosicao(labirinto, &x, &y);
-          acharSaida(labirinto, x, y);
+          posicao = designaPosicao(x, y);
+          acharSaida(labirinto, posicao);
           cont = contador(labirinto);
           if(cont < 0){  // Contador retorna negativo se o labirinto nao tiver saida
             printf("EPIC FAIL!\n");
@@ -56,11 +59,12 @@ int main(void) {
           }
           printf("Numero de passos:%d\n", cont);
           printf("Coordenadas ate a saida: \n");
-          printCoordenadas(labirinto, x, y);
+          printCoordenadas(labirinto, posicao);
         break;
     }
   
   desalocarLabirinto(&labirinto);
+  desalocarPosicao(&posicao);
 
   fim = clock();
   tempo_exec = ((double)(fim - inicio)) / CLOCKS_PER_SEC;

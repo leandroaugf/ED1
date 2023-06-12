@@ -11,14 +11,22 @@ struct labirinto{
 
 };
 
+struct posicao{
+
+  int x;
+  int y;
+
+};
+
+
 
 // Funcao que imprime pontilhados ate o final do lab;
-void printLabirinto(Labirinto *labirinto, int x, int y) {
+void printLabirinto(Labirinto *labirinto, Posicao *posicao) {
   for (int i = 0; i < labirinto->lins; i++) {
     for (int j = 0; j < labirinto->cols; j++) {
       
       // Volta a colocar o 'M' na posicao inicial ja que a funcao acharSaida o substitui por pontilhado
-      if(i == x && j == y){
+      if(i == posicao->x && j == posicao->y){
         labirinto->lab[i][j] = 'M';
       }
       printf("%c", labirinto->lab[i][j]);
@@ -40,6 +48,15 @@ Labirinto* alocarLabirinto(int lins, int cols) {
   }
 
   return labirinto;
+}
+
+Posicao* designaPosicao(int x, int y){
+  Posicao* posicao = malloc(sizeof(Posicao));
+
+  posicao->x = x;
+  posicao->y = y;
+
+  return posicao;
 }
 
 // Funcao que faz a leitura do labirinto
@@ -85,13 +102,13 @@ int contador(Labirinto* labirinto){
 }
 
 // Funcao que imprime as coordenadas ate o final do labirinto;
-void printCoordenadas(Labirinto* labirinto, int x, int y){
+void printCoordenadas(Labirinto* labirinto, Posicao* posicao){
 
     for(int i = 0; i < labirinto->lins; i++){
         for(int j = 0; j < labirinto->cols; j++){
            
            // Volta a colocar o 'M' na posicao inicial ja que a funcao acharSaida o substitui por pontilhado
-           if(i == x && j == y){
+           if(i == posicao->x && j == posicao->y){
             labirinto->lab[i][j] = 'M';
            }
 
@@ -103,7 +120,9 @@ void printCoordenadas(Labirinto* labirinto, int x, int y){
 }
 
 // Funcao para achar o menor caminho atraves de recursao
-int acharSaida(Labirinto* labirinto, int x, int y){  
+int acharSaida(Labirinto* labirinto, Posicao* posicao){
+  int x = posicao->x;
+  int y = posicao->y;  
   // Verifica se está fora dos limites do labirinto ou encontrou um obstáculo
   if(x < 0 || x >= labirinto->lins || y < 0 || y >= labirinto->cols || labirinto->lab[x][y] == '*' || labirinto->lab[x][y] == '.' || labirinto->lab[x][y] == '#'){
     return 0;
@@ -118,23 +137,34 @@ int acharSaida(Labirinto* labirinto, int x, int y){
   // Marca a posicao atual como visitada
   labirinto->lab[x][y] = '.';
 
+  Posicao* nova_posicao;
+  nova_posicao = designaPosicao(x, y);
+
   // Tenta mover para cima
-  if(acharSaida(labirinto, x-1, y)){
+  nova_posicao->x = x - 1;
+  nova_posicao->y = y;
+  if(acharSaida(labirinto, nova_posicao)){
     return 1;
   }
 
   // Tenta mover pra baixo
-  if(acharSaida(labirinto, x+1, y)){
+  nova_posicao->x = x+1;
+  nova_posicao->y = y;
+  if(acharSaida(labirinto, nova_posicao)){
     return 1;
   }
 
   // Tenta mover pra esquerda
-  if(acharSaida(labirinto, x, y-1)){
+  nova_posicao->x = x;
+  nova_posicao->y = y-1;
+  if(acharSaida(labirinto, nova_posicao)){
     return 1;
   }
 
   // Tenta mover pra direita
-  if(acharSaida(labirinto, x, y+1)){
+  nova_posicao->x = x;
+  nova_posicao->y = y+1;
+  if(acharSaida(labirinto, nova_posicao)){
     return 1;
   }
 
@@ -154,4 +184,9 @@ void desalocarLabirinto(Labirinto** labirinto){
 
       free((*labirinto)->lab);
       free(*labirinto);
+}
+
+void desalocarPosicao(Posicao** posicao){
+  
+  free(*posicao);
 }
