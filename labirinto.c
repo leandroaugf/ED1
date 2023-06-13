@@ -124,7 +124,13 @@ Percurso* alocarPercurso(Labirinto* labirinto, int x, int y){
   percurso->tamanho = contador(labirinto);
 
   /*Alocacao da posicao_saida a partir da funcao que aloca posicao*/
-  percurso->posicao_saida = (Posicao**)malloc(percurso->tamanho * sizeof(Posicao*));
+  if(percurso->tamanho > 0){
+    percurso->posicao_saida = (Posicao**)malloc(percurso->tamanho * sizeof(Posicao*));
+  } else {
+    /*Caso o cotador seja negativo, labirinto sem solucao, nao tem necessidade de alocar o 
+    tamanho das posicoes*/
+    percurso->posicao_saida = (Posicao**)malloc(sizeof(Posicao*));
+  }
 
   for(int i = 0; i < percurso->tamanho; i++){
     percurso->posicao_saida[i] = designaPosicao(x, y);
