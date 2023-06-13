@@ -6,6 +6,7 @@
 
 int main(void) {
 
+    //Variaveis pra contagem de tempo
     double tempo_exec;
     clock_t inicio, fim;
 
@@ -17,7 +18,7 @@ int main(void) {
     Labirinto *labirinto;
     Posicao *posicao;
     Percurso *percurso;
-    int x, y;
+    int x, y;  //Coordenadas iniciais
     int lins, cols;
     char opcao;
 
@@ -50,14 +51,16 @@ int main(void) {
           percurso = alocarPercurso(labirinto, x, y);
           passosAteSaida(percurso);
           designaCoordenadas(labirinto, percurso, posicao);
-          printCoordenadas(labirinto, percurso);
+          printCoordenadas(percurso);
         break;
     }
   
+  //Desaloca TADs
   desalocarLabirinto(&labirinto);
   desalocarPosicao(&posicao);
   desalocarPercurso(&percurso);
 
+  //Imprime tempo 
   fim = clock();
   tempo_exec = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
   printf("\nTempo de execucao: %fs\n", tempo_exec);
