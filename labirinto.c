@@ -151,7 +151,7 @@ void designaCoordenadas(Labirinto* labirinto, Percurso* percurso, Posicao* posic
     }
 }
 
-void printCoordenadas(Labirinto* labirinto, Percurso* percurso){
+void printCoordenadas(Percurso* percurso){
 
   if(percurso->tamanho >= 0){  
     printf("Coordenadas ate a saida: \n");
@@ -183,9 +183,10 @@ int acharSaida(Labirinto* labirinto, Posicao* posicao){
   nova_posicao = designaPosicao(x, y);
 
   // Tenta mover para cima
-  nova_posicao->x = x - 1;
+  nova_posicao->x = x-1;
   nova_posicao->y = y;
   if(acharSaida(labirinto, nova_posicao)){
+    desalocarPosicao(&nova_posicao);
     return 1;
   }
 
@@ -193,6 +194,7 @@ int acharSaida(Labirinto* labirinto, Posicao* posicao){
   nova_posicao->x = x+1;
   nova_posicao->y = y;
   if(acharSaida(labirinto, nova_posicao)){
+    desalocarPosicao(&nova_posicao);
     return 1;
   }
 
@@ -200,6 +202,7 @@ int acharSaida(Labirinto* labirinto, Posicao* posicao){
   nova_posicao->x = x;
   nova_posicao->y = y-1;
   if(acharSaida(labirinto, nova_posicao)){
+    desalocarPosicao(&nova_posicao);
     return 1;
   }
 
@@ -207,12 +210,15 @@ int acharSaida(Labirinto* labirinto, Posicao* posicao){
   nova_posicao->x = x;
   nova_posicao->y = y+1;
   if(acharSaida(labirinto, nova_posicao)){
+    desalocarPosicao(&nova_posicao);
     return 1;
   }
 
   // Marca atual posicao como nao visitada (backtracking)
   labirinto->lab[x][y] = ' ';
 
+ 
+  desalocarPosicao(&nova_posicao);
   return 0;
   
 }

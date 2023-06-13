@@ -5,21 +5,19 @@ typedef struct labirinto Labirinto;
 typedef struct posicao Posicao;
 typedef struct percurso Percurso;
 
-Labirinto* alocarLabirinto(int, int);
-void leLabirinto(Labirinto*);
-void desalocarLabirinto(Labirinto**);
-int acharSaida(Labirinto*, Posicao*);
-void criaSolucao(char**, int , int);
-void printLabirinto(Labirinto*, Posicao*); 
-void primeiraPosicao(Labirinto*, int*, int*);
-int contador(Labirinto*);
-void designaCoordenadas(Labirinto*, Percurso*, Posicao*);
-void printCoordenadas(Labirinto*, Percurso*);
-Posicao* designaPosicao(int, int);
-void desalocarPosicao(Posicao**);
-Percurso* alocarPercurso(Labirinto*, int, int);
-void desalocarPercurso(Percurso**);
-void passosAteSaida(Percurso*);
+Labirinto* alocarLabirinto(int, int);   ///////1
+void leLabirinto(Labirinto*);          //////2
+void primeiraPosicao(Labirinto*, int*, int*);     /////3
+Posicao* designaPosicao(int, int);         //////4
+int acharSaida(Labirinto*, Posicao*);   //////5
+Percurso* alocarPercurso(Labirinto*, int, int);   ////6
+void passosAteSaida(Percurso*);      ////7
+void printLabirinto(Labirinto*, Posicao*);     /////8
+void designaCoordenadas(Labirinto*, Percurso*, Posicao*);   /////9
+void printCoordenadas(Percurso*);        /////10
+void desalocarLabirinto(Labirinto**);    /////11
+void desalocarPosicao(Posicao**);        /////12
+void desalocarPercurso(Percurso**);      ////13
 
 
 #endif // LABIRINTO_H
